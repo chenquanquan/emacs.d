@@ -297,14 +297,14 @@
 (defun my-reload-config ()
   "Reload ~/.emacs file"
   (interactive)
-  (load-file "~/.emacs"))
+  (load-file "~/.emacs.d/init.el"))
 
 ;; my-open-config
 ;; open .emacs
 (defun my-open-config ()
   "Open ~/.emacs file"
   (interactive)
-  (find-file "~/.emacs"))
+  (find-file "~/.emacs.d/init.el"))
 
 ;; wy-go-to-char
 ;; Like vim "fx" command
