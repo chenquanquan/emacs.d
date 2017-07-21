@@ -42,6 +42,132 @@
 (package-initialize) ;; You might already have this line
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; my-install-package
+;; install my package
+;;
+(defun my-install-package ( )
+    "install all package of my plugin"
+  (interactive)
+  (package-install 'color-theme)
+  (package-install 'color-theme-solarized)
+  (package-install 'smex)
+  (package-install 'xcscope)
+  ;;(package-install 'winner-mode)
+  (package-install 'magit)
+  (package-install 'google-translate)
+  (package-install 'youdao-dictionary)
+  (package-install 'undo-tree)
+  (package-install 'switch-window)
+  (package-install 'sr-speedbar)
+  (package-install 'esh-help)
+  (package-install 'eshell-prompt-extras)
+  ;;(package-install 'vs-svn)
+  (package-install 'jumplist)
+  (package-install 'ace-jump-mode)
+  (package-install 'column-enforce-mode)
+  (package-install 'highlight-escape-sequences)
+  (package-install 'neotree)
+  (package-install 'anzu)
+  (package-install 'irony)
+  (package-install 'company)
+  (package-install 'company-irony)
+  (package-install 'company-irony-c-headers)
+  (package-install 'flycheck)
+  (package-install 'flycheck-irony)
+  (package-install 'avy-flycheck)
+  (package-install 'highlight-parentheses)
+  )
+
+;; my-reload-config
+;; reload .emacs
+(defun my-reload-config ()
+  "Reload ~/.emacs file"
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+
+;; my-open-config
+;; open .emacs
+(defun my-open-config ()
+  "Open ~/.emacs file"
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+
+;; wy-go-to-char
+;; Like vim "fx" command
+;; Reference frome https://my.oschina.net/alphajay/blog/152599
+(defun wy-go-to-char (n char)
+  "Move forward to Nth occurence of CHAR.
+Typing `wy-go-to-char-key' again will move forwad to the next Nth
+occurence of CHAR."
+  (interactive "p\ncGo to char: ")
+  (search-forward (string char) nil nil n)
+  (while (char-equal (read-char)
+		     char)
+    (search-forward (string char) nil nil n))
+  (setq unread-command-events (list last-input-event)))
+
+(define-key global-map (kbd "C-c a") 'wy-go-to-char)
+
+;; wy-go-back-to-char
+;; Reference wy-go-to-char
+;;
+(defun wy-go-back-to-char (n char)
+  (interactive "p\ncGo back to char: ")
+  (search-backward (string char) nil nil n)
+  (while (char-equal (read-char)
+		     char)
+    (search-backward (string char) nil nil n))
+  (setq unread-command-events (list last-input-event)))
+
+(define-key global-map (kbd "C-c A") 'wy-go-back-to-char)
+
+;; my-flycheck-add-include-path
+;;
+;; path load method is reference from (find-file)
+(defun my-flycheck-add-include-path (filename &optional wildcard)
+  "Add header file path to flyckeck"
+  (interactive
+   (find-file-read-args "Input path:"
+			()))
+  (setq flycheck-clang-include-path (cons filename flycheck-clang-include-path))
+  (message "add %s in %s" filename flycheck-clang-include-path)
+  )
+
+;; my-open-new-line
+;; new function like "o" in vim
+;;
+(defun my-open-new-line ( )
+  "Add new line after current line, like o in vim"
+  (interactive)
+  (move-end-of-line nil)
+  (newline))
+(define-key global-map (kbd "C-o") 'my-open-new-line)
+
+;; my-open-new-before-line
+;; new function like "O" in vim
+;;
+(defun my-open-new-before-line ( )
+  "Add new line before curren line, like O in vim"
+  (interactive)
+  (previous-line)
+  (my-open-new-line))
+(define-key global-map (kbd "C-S-o") 'my-open-new-before-line)
+
+;; my-delete-indentation
+;; new function like "J" in vim
+;;
+(defun my-delete-indentation ( )
+  "merge next line with current line, like J in vim"
+  (interactive)
+  (push-mark)
+  (next-line)
+  (delete-indentation)
+  (pop-mark))
+(define-key global-map (kbd "C-j") 'my-delete-indentation)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom configure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -73,7 +199,7 @@
 ;; theme
 ;;
 (require 'color-theme)
-;;(color-theme-initialize)
+(color-theme-initialize)
 ;;(color-theme-kingsajz)
 (require 'color-theme-solarized)
 (color-theme-solarized)
@@ -289,92 +415,3 @@
 ;; C-x r d/c/t: like select in vim
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom function
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; my-reload-config
-;; reload .emacs
-(defun my-reload-config ()
-  "Reload ~/.emacs file"
-  (interactive)
-  (load-file "~/.emacs.d/init.el"))
-
-;; my-open-config
-;; open .emacs
-(defun my-open-config ()
-  "Open ~/.emacs file"
-  (interactive)
-  (find-file "~/.emacs.d/init.el"))
-
-;; wy-go-to-char
-;; Like vim "fx" command
-;; Reference frome https://my.oschina.net/alphajay/blog/152599
-(defun wy-go-to-char (n char)
-  "Move forward to Nth occurence of CHAR.
-Typing `wy-go-to-char-key' again will move forwad to the next Nth
-occurence of CHAR."
-  (interactive "p\ncGo to char: ")
-  (search-forward (string char) nil nil n)
-  (while (char-equal (read-char)
-		     char)
-    (search-forward (string char) nil nil n))
-  (setq unread-command-events (list last-input-event)))
-
-(define-key global-map (kbd "C-c a") 'wy-go-to-char)
-
-;; wy-go-back-to-char
-;; Reference wy-go-to-char
-;;
-(defun wy-go-back-to-char (n char)
-  (interactive "p\ncGo back to char: ")
-  (search-backward (string char) nil nil n)
-  (while (char-equal (read-char)
-		     char)
-    (search-backward (string char) nil nil n))
-  (setq unread-command-events (list last-input-event)))
-
-(define-key global-map (kbd "C-c A") 'wy-go-back-to-char)
-
-;; my-flycheck-add-include-path
-;;
-;; path load method is reference from (find-file)
-(defun my-flycheck-add-include-path (filename &optional wildcard)
-  "Add header file path to flyckeck"
-  (interactive
-   (find-file-read-args "Input path:"
-			()))
-  (setq flycheck-clang-include-path (cons filename flycheck-clang-include-path))
-  (message "add %s in %s" filename flycheck-clang-include-path)
-  )
-
-;; my-open-new-line
-;; new function like "o" in vim
-;;
-(defun my-open-new-line ( )
-  "Add new line after current line, like o in vim"
-  (interactive)
-  (move-end-of-line nil)
-  (newline))
-(define-key global-map (kbd "C-o") 'my-open-new-line)
-
-;; my-open-new-before-line
-;; new function like "O" in vim
-;;
-(defun my-open-new-before-line ( )
-  "Add new line before curren line, like O in vim"
-  (interactive)
-  (previous-line)
-  (my-open-new-line))
-(define-key global-map (kbd "C-S-o") 'my-open-new-before-line)
-
-;; my-delete-indentation
-;; new function like "J" in vim
-;;
-(defun my-delete-indentation ( )
-  "merge next line with current line, like J in vim"
-  (interactive)
-  (push-mark)
-  (next-line)
-  (delete-indentation)
-  (pop-mark))
-(define-key global-map (kbd "C-j") 'my-delete-indentation)
