@@ -32,15 +32,15 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; From http://ergoemacs.org/emacs/emacs_package_system.html
-(require 'package) ;; You might already have this line
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+  (add-to-list 'package-archives (cons "melpa" url) t))
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize) ;; You might already have this line
-
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom function
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
