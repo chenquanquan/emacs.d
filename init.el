@@ -137,43 +137,22 @@ occurence of CHAR."
 
 (define-key global-map (kbd "C-c A") 'wy-go-back-to-char)
 
-;; my-flycheck-add-include-path
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom package
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'load-path (expand-file-name "local-lisp" user-emacs-directory))
 ;;
-;; path load method is reference from (find-file)
-(defun my-flycheck-add-include-path (filename &optional wildcard)
-  "Add header file path to flyckeck, (FILENAME WILDCARD)."
-  (interactive
-   (find-file-read-args "Input path:"
-			()))
-  (setq flycheck-clang-include-path (cons filename flycheck-clang-include-path))
-  (message "add %s in %s" filename flycheck-clang-include-path)
-  )
+;; vcmd
+;; command like vim
+(require 'vcmd)
+(define-key global-map (kbd "C-o") 'vcmd-open-new-line)
+(define-key global-map (kbd "C-S-o") 'vcmd-open-new-before-line)
+(define-key global-map (kbd "C-j") 'vcmd-delete-indentation)
 
-;; my-open-new-line
-(defun my-open-new-line ( )
-  "Add new line after current line, like o in vim."
-  (interactive)
-  (move-end-of-line nil)
-  (newline))
-(define-key global-map (kbd "C-o") 'my-open-new-line)
-
-;; my-open-new-before-line
-(defun my-open-new-before-line ( )
-  "Add new line before curren line, like O in vim."
-  (interactive)
-  (previous-line)
-  (my-open-new-line))
-(define-key global-map (kbd "C-S-o") 'my-open-new-before-line)
-
-;; my-delete-indentation
-(defun my-delete-indentation ( )
-  "Merge next line with current line, like J in vim."
-  (interactive)
-  (push-mark)
-  (next-line)
-  (delete-indentation)
-  (pop-mark))
-(define-key global-map (kbd "C-j") 'my-delete-indentation)
+;;
+;; code-helper
+;;
+(require 'code-helper)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom configure
@@ -437,4 +416,4 @@ occurence of CHAR."
 ;; revert-buffer-with-coding-system: change buffer encode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; init.el ends
+;;; init.el ends here
