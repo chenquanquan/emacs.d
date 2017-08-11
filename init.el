@@ -1,3 +1,7 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
@@ -19,12 +23,12 @@
      ("IThome" "https://www.ithome.com/rss/" nil nil nil)
      ("debiancn" "https://forums.debiancn.org/c/5-category.rss" nil nil nil)
      ("oschina-xb-blog" "https://my.oschina.net/xxiaobian/rss" nil nil nil)
-     ("lwn" "https://lwn.net/headlines/rss" nil nil nil)
-     )))
+     ("lwn" "https://lwn.net/headlines/rss" nil nil nil))))
  '(newsticker-url-list-defaults nil)
  '(package-selected-packages
    (quote
-    (weibo highlight-parentheses company-irony-c-headers company-irony flycheck-irony avy-flycheck flycheck anzu solarized-theme highlight-symbol neotree highlight-escape-sequences column-enforce-mode ace-jump-mode jumplist dsvn esh-help bash-completion irony-eldoc irony find-file-in-repository ac-etags sr-speedbar switch-window qt-pro-mode auto-compile magit ac-clang w3m undo-tree youdao-dictionary sdcv google-translate smex molokai-theme xcscope))))
+    (exec-path-from-shell company eshell-prompt-extras color-theme-solarized color-theme weibo highlight-parentheses company-irony-c-headers company-irony flycheck-irony avy-flycheck flycheck anzu solarized-theme highlight-symbol neotree highlight-escape-sequences column-enforce-mode ace-jump-mode jumplist dsvn esh-help bash-completion irony-eldoc irony find-file-in-repository ac-etags sr-speedbar switch-window qt-pro-mode auto-compile magit ac-clang w3m undo-tree youdao-dictionary sdcv google-translate smex molokai-theme xcscope)))
+ '(send-mail-function (quote smtpmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -48,7 +52,7 @@
 ;; install my package
 ;;
 (defun my-install-package ( )
-    "install all package of my plugin"
+  "Install all package of my plugin."
   (interactive)
   (package-install 'color-theme)
   (package-install 'color-theme-solarized)
@@ -80,17 +84,28 @@
   (package-install 'highlight-parentheses)
   )
 
+;; my-toggle-current-window-dedication
+(defun my-toggle-current-window-dedication ()
+  "Set the current window to dedication window, can't be replaced by 'display buffer' Reference from https://stackoverflow.com/questions/4244637/dedicated-window-for-dired-mode-in-emacs."
+ (interactive)
+ (let* ((window    (selected-window))
+        (dedicated (window-dedicated-p window)))
+   (set-window-dedicated-p window (not dedicated))
+   (message "Window %sdedicated to %s"
+            (if dedicated "no longer " "")
+            (buffer-name))))
+
 ;; my-reload-config
 ;; reload .emacs
 (defun my-reload-config ()
-  "Reload ~/.emacs file"
+  "Reload ~/.emacs file."
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 
 ;; my-open-config
 ;; open .emacs
 (defun my-open-config ()
-  "Open ~/.emacs file"
+  "Open ~/.emacs file."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
@@ -111,9 +126,8 @@ occurence of CHAR."
 (define-key global-map (kbd "C-c a") 'wy-go-to-char)
 
 ;; wy-go-back-to-char
-;; Reference wy-go-to-char
-;;
 (defun wy-go-back-to-char (n char)
+  "Refrence wy-go-to-char, (N CHAR)."
   (interactive "p\ncGo back to char: ")
   (search-backward (string char) nil nil n)
   (while (char-equal (read-char)
@@ -127,7 +141,7 @@ occurence of CHAR."
 ;;
 ;; path load method is reference from (find-file)
 (defun my-flycheck-add-include-path (filename &optional wildcard)
-  "Add header file path to flyckeck"
+  "Add header file path to flyckeck, (FILENAME WILDCARD)."
   (interactive
    (find-file-read-args "Input path:"
 			()))
@@ -136,30 +150,24 @@ occurence of CHAR."
   )
 
 ;; my-open-new-line
-;; new function like "o" in vim
-;;
 (defun my-open-new-line ( )
-  "Add new line after current line, like o in vim"
+  "Add new line after current line, like o in vim."
   (interactive)
   (move-end-of-line nil)
   (newline))
 (define-key global-map (kbd "C-o") 'my-open-new-line)
 
 ;; my-open-new-before-line
-;; new function like "O" in vim
-;;
 (defun my-open-new-before-line ( )
-  "Add new line before curren line, like O in vim"
+  "Add new line before curren line, like O in vim."
   (interactive)
   (previous-line)
   (my-open-new-line))
 (define-key global-map (kbd "C-S-o") 'my-open-new-before-line)
 
 ;; my-delete-indentation
-;; new function like "J" in vim
-;;
 (defun my-delete-indentation ( )
-  "merge next line with current line, like J in vim"
+  "Merge next line with current line, like J in vim."
   (interactive)
   (push-mark)
   (next-line)
@@ -169,6 +177,19 @@ occurence of CHAR."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom configure
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; font config for org table showing.
+;; reference from http://www.cnblogs.com/aqing1987/p/4187101.html
+(set-default-font "monospace-11")
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+   (set-fontset-font (frame-parameter nil 'font)
+                     charset
+                     (font-spec :family "WenQuanYi Micro Hei")))
+;; tune rescale so that Chinese character width = 2 * English character width
+(setq face-font-rescale-alist '(("monospace" . 1.0) ("WenQuanYi" . 1.23)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom package configure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;
@@ -188,8 +209,8 @@ occurence of CHAR."
 ;;
 ;; internal plugin
 ;;
-(require 'zone)
-(zone-when-idle (* 5 60))
+;;(require 'zone)
+;;(zone-when-idle (* 30 60))
 
 ;; newstricker
 ;;
@@ -215,9 +236,9 @@ occurence of CHAR."
 ;;
 ;; winner-mode
 ;; "C-c left" to restore window layout
-(when (fboundp 'winner-mode) 
- (winner-mode) 
- (windmove-default-keybindings))
+(when (fboundp 'winner-mode)
+  (winner-mode)
+  (windmove-default-keybindings))
 
 ;;
 ;; smex
@@ -409,9 +430,11 @@ occurence of CHAR."
 (global-highlight-parentheses-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; command 
+;; command
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M-s . / C-s C-w: like * in vim
 ;; C-x r d/c/t: like select in vim
+;; revert-buffer-with-coding-system: change buffer encode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; init.el ends
