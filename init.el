@@ -27,7 +27,7 @@
  '(newsticker-url-list-defaults nil)
  '(package-selected-packages
    (quote
-    (exec-path-from-shell company eshell-prompt-extras color-theme-solarized color-theme weibo highlight-parentheses company-irony-c-headers company-irony flycheck-irony avy-flycheck flycheck anzu solarized-theme highlight-symbol neotree highlight-escape-sequences column-enforce-mode ace-jump-mode jumplist dsvn esh-help bash-completion irony-eldoc irony find-file-in-repository ac-etags sr-speedbar switch-window qt-pro-mode auto-compile magit ac-clang w3m undo-tree youdao-dictionary sdcv google-translate smex molokai-theme xcscope)))
+    (pyim-greatdict pyim fcitx exec-path-from-shell company eshell-prompt-extras color-theme-solarized color-theme weibo highlight-parentheses company-irony-c-headers company-irony flycheck-irony avy-flycheck flycheck anzu solarized-theme highlight-symbol neotree highlight-escape-sequences column-enforce-mode ace-jump-mode jumplist dsvn esh-help bash-completion irony-eldoc irony find-file-in-repository ac-etags sr-speedbar switch-window qt-pro-mode auto-compile magit ac-clang w3m undo-tree youdao-dictionary sdcv google-translate smex molokai-theme xcscope)))
  '(send-mail-function (quote smtpmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -82,6 +82,9 @@
   (package-install 'flycheck-irony)
   (package-install 'avy-flycheck)
   (package-install 'highlight-parentheses)
+  (package-install 'find-file-in-repository)
+  (package-install 'pyim)
+  (package-install 'pyim-greatdict)
   )
 
 ;; my-toggle-current-window-dedication
@@ -185,6 +188,7 @@ occurence of CHAR."
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq scroll-margin 3
       scroll-conservatively 10000)
+
 ;;
 ;; internal plugin
 ;;
@@ -407,6 +411,35 @@ occurence of CHAR."
 ;;
 (require 'highlight-parentheses)
 (global-highlight-parentheses-mode)
+
+;;
+;; Pyim
+;;
+(require 'pyim)
+(require 'pyim-basedict)
+(pyim-basedict-enable)
+(setq default-input-method "pyim")
+
+(setq pyim-default-scheme 'quanpin)
+
+(setq-default pyim-punctuation-half-width-functions
+	      '(pyim-probe-punctuation-line-beginning
+		pyim-probe-punctuation-after-punctuation))
+
+;; 开启拼音搜索功能
+(setq pyim-isearch-enable-pinyin-search t)
+
+;; 选词框显示5个候选词
+(setq pyim-page-length 5)
+
+(setq default-input-method "pyim")
+(global-set-key (kbd "C-\\") 'toggle-input-method)
+
+;;
+;; pyim-greatdict
+;;
+(require 'pyim-greatdict)
+(pyim-greatdict-enable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; command
