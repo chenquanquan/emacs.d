@@ -85,6 +85,7 @@
   (package-install 'find-file-in-repository)
   (package-install 'pyim)
   (package-install 'pyim-greatdict)
+  (package-install 'ac-clang)
   )
 
 ;; my-toggle-current-window-dedication
@@ -144,6 +145,7 @@ occurence of CHAR."
 ;; Custom package
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "local-lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "init" user-emacs-directory))
 ;;
 ;; vcmd
 ;; command like vim
@@ -156,6 +158,11 @@ occurence of CHAR."
 ;; code-helper
 ;;
 (require 'code-helper)
+
+;;
+;; init script
+;;
+(require 'init-ac)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom configure
