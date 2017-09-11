@@ -74,10 +74,6 @@
   (package-install 'highlight-escape-sequences)
   (package-install 'neotree)
   (package-install 'anzu)
-  (package-install 'irony)
-  (package-install 'company)
-  (package-install 'company-irony)
-  (package-install 'company-irony-c-headers)
   (package-install 'flycheck)
   (package-install 'flycheck-irony)
   (package-install 'avy-flycheck)
@@ -85,7 +81,6 @@
   (package-install 'find-file-in-repository)
   (package-install 'pyim)
   (package-install 'pyim-greatdict)
-  (package-install 'ac-clang)
   )
 
 ;; my-toggle-current-window-dedication
@@ -366,45 +361,9 @@ occurence of CHAR."
 (global-anzu-mode +1)
 
 ;;
-;; irony
-;;
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-;;
-;; company
-;;
-(add-hook 'after-init-hook 'global-company-mode)
-
-;;
-;; company-irony
-;;
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
-
-;;
-;; compay-irony-c-header
-;;When compiler options change, call
-;;`company-irony-c-headers-reload-compiler-output` manually to
-;;reload.
-(require 'company-irony-c-headers)
-;; Load with `irony-mode` as a grouped backend
-(eval-after-load 'company
-  '(add-to-list
-    'company-backends '(company-irony-c-headers company-irony)))
-
-;;
 ;; flycheck
 ;;
 (add-hook 'after-init-hook #'global-flycheck-mode)
-
-;;
-;; flycheck-irony
-;;
-;;(eval-after-load 'flycheck
-;;  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
 ;; avy-flycheck
 ;;
@@ -445,8 +404,8 @@ occurence of CHAR."
 ;;
 ;; pyim-greatdict
 ;;
-(require 'pyim-greatdict)
-(pyim-greatdict-enable)
+;;(require 'pyim-greatdict)
+;;(pyim-greatdict-enable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; command
