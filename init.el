@@ -158,7 +158,7 @@ occurence of CHAR."
 ;; init script
 ;;
 (require 'init-ac)
-
+(require 'init-style)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom configure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -209,14 +209,6 @@ occurence of CHAR."
 ;;(color-theme-kingsajz)
 (require 'color-theme-solarized)
 (color-theme-solarized)
-
-;;
-;; For C source
-;;
-(add-hook 'c-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'c++-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'c-mode-hook '(lambda () (electric-pair-mode t)))
-(add-hook 'c++-mode-hook '(lambda () (electric-pair-mode t)))
 
 ;;
 ;; winner-mode
